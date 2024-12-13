@@ -11,8 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_user")
-public class User {
+@Table(name = "tb_employees")
+public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -23,11 +23,11 @@ public class User {
 	@JoinColumn(name = "department_id")
 	private Department departament;
 	
-	public User() {
+	public Employee() {
 		
 	}
 
-	public User(Long id, String name, String email, Department departament) {
+	public Employee(Long id, String name, String email, Department departament) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -79,7 +79,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		Employee other = (Employee) obj;
 		return Objects.equals(id, other.id);
 	}
 	
