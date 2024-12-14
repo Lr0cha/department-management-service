@@ -23,4 +23,8 @@ public class DepartmentService {
 		return obj.get();
 	}
 	
+	public Department insert(Department obj) {
+		return repository.save(obj);
+	}
+	
 }

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.UserDept.repositories.EmployeeRepository;
 import com.example.UserDept.entities.Employee;
+import com.example.UserDept.repositories.EmployeeRepository;
 @Service
 public class EmployeeService {
 	
@@ -21,5 +21,9 @@ public class EmployeeService {
 	public Employee findById(Long id) {
 		Optional<Employee> obj = repository.findById(id);
 		return obj.get();
+	}
+	
+	public Employee insert(Employee obj) {
+		return repository.save(obj);
 	}
 }

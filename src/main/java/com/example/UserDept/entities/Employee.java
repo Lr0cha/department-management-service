@@ -21,17 +21,17 @@ public class Employee {
 	
 	@ManyToOne
 	@JoinColumn(name = "department_id")
-	private Department departament;
+	private Department department;
 	
 	public Employee() {
-		
 	}
-
-	public Employee(Long id, String name, String email, Department departament) {
+	
+	public Employee(Long id, String name, String email, Department department) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.departament = departament;
+		this.department = department;
 	}
 
 	public Long getId() {
@@ -58,12 +58,12 @@ public class Employee {
 		this.email = email;
 	}
 
-	public Department getDepartament() {
-		return departament;
+	public Department getDepartment() {
+		return department;
 	}
 
-	public void setDepartament(Department departament) {
-		this.departament = departament;
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	@Override
