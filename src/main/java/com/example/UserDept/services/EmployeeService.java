@@ -26,4 +26,8 @@ public class EmployeeService {
 	public Employee insert(Employee obj) {
 		return repository.save(obj);
 	}
+	
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
 }
