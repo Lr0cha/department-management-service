@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.repositories.DepartmentRepository;
+import com.example.UserDept.services.exceptions.DatabaseException;
 import com.example.UserDept.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -29,7 +31,17 @@ public class DepartmentService {
 	}
 	
 	public void delete(Long id) {
-		repository.deleteById(id);
+		verifyDepartmentExistsById(id);
+		try {
+			repository.deleteById(id);
+		}catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
+	
+	private Department verifyDepartmentExistsById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with " + id));
+    }
 	
 }
