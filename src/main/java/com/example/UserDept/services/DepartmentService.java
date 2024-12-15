@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.repositories.DepartmentRepository;
+import com.example.UserDept.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class DepartmentService {
@@ -20,7 +21,7 @@ public class DepartmentService {
 	
 	public Department findById(Long id){
 		Optional<Department> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public Department insert(Department obj) {
