@@ -30,4 +30,15 @@ public class EmployeeService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+	
+	public Employee update(Long id, Employee obj) {
+		Employee entity = repository.getReferenceById(id);
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	private void updateData(Employee entity, Employee obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());	
+	}
 }
