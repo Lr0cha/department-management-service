@@ -57,6 +57,5 @@ public class Department {
 		Department other = (Department) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.UserDept.services.exceptions.DataExistsException;
 import com.example.UserDept.services.exceptions.DatabaseException;
 import com.example.UserDept.services.exceptions.ResourceNotFoundException;
 
@@ -24,6 +25,13 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
 		String error = "Database error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	@ExceptionHandler(DataExistsException.class)
+	public ResponseEntity<StandardError> dataExists(DataExistsException e, HttpServletRequest request) {
+		String error = "Data already exists error";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.repositories.DepartmentRepository;
+import com.example.UserDept.services.exceptions.DataExistsException;
 import com.example.UserDept.services.exceptions.DatabaseException;
 import com.example.UserDept.services.exceptions.ResourceNotFoundException;
 
@@ -27,6 +28,9 @@ public class DepartmentService {
 	}
 	
 	public Department insert(Department obj) {
+		if(repository.existsByName(obj.getName())) {
+			throw new DataExistsException("Department already exists");
+		}
 		return repository.save(obj);
 	}
 	
