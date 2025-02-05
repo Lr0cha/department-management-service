@@ -24,7 +24,6 @@ public class DepartmentService {
 	public List<Department> findAll(){
 		return repository.findAll();
 	}
-	
 	@Transactional(readOnly = true)
 	public Department findById(Long id){
 		Optional<Department> obj = repository.findById(id);

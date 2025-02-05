@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.UserDept.dto.EmployeeCreateDto;
+import com.example.UserDept.dto.EmployeeResponseDto;
 import com.example.UserDept.entities.Employee;
 import com.example.UserDept.services.EmployeeService;
 
@@ -37,14 +39,17 @@ public class EmployeeController {
 		Employee obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
 	@PostMapping
-	public ResponseEntity<Employee> insert(@Valid @RequestBody Employee obj){
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
-	}
+	public ResponseEntity<EmployeeResponseDto> insert(@Valid @RequestBody EmployeeCreateDto dto) {
+        EmployeeResponseDto emp = service.insert(dto);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(emp.getId())
+                .toUri();
+        
+        return ResponseEntity.created(uri).body(emp);
+    }
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
