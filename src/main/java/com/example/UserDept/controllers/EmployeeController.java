@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.UserDept.entities.Employee;
 import com.example.UserDept.services.EmployeeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/employees")
 public class EmployeeController {
@@ -37,7 +39,7 @@ public class EmployeeController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Employee> insert(@RequestBody Employee obj){
+	public ResponseEntity<Employee> insert(@Valid @RequestBody Employee obj){
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(obj.getId()).toUri();
@@ -51,7 +53,7 @@ public class EmployeeController {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Employee> update(@PathVariable long id, @RequestBody Employee obj){
+	public ResponseEntity<Employee> update(@PathVariable long id, @Valid @RequestBody Employee obj){
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}

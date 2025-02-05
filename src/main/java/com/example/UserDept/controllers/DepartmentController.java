@@ -17,6 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.services.DepartmentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/departments")
 public class DepartmentController {
@@ -36,7 +38,7 @@ public class DepartmentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Department> insert(@RequestBody Department obj){
+	public ResponseEntity<Department> insert(@Valid @RequestBody Department obj){
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(obj.getId()).toUri();

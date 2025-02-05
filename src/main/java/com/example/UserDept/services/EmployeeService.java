@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.UserDept.entities.Employee;
 import com.example.UserDept.repositories.EmployeeRepository;
@@ -13,27 +14,29 @@ import com.example.UserDept.services.exceptions.DatabaseException;
 import com.example.UserDept.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class EmployeeService {
 	
 	@Autowired
 	private EmployeeRepository repository;
 	
+	@Transactional(readOnly = true)
 	public List<Employee> findAll() {
 		return repository.findAll();
 	}
-
+	@Transactional(readOnly = true)
 	public Employee findById(Long id) {
 		Optional<Employee> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
-	
+	@Transactional
 	public Employee insert(Employee obj) {
 		return repository.save(obj);
 	}
-	
+	@Transactional
 	public void delete(Long id) {
-		verifyEmployeeExistsById(id);
+		findById(id);
 		try {
 			repository.deleteById(id);
 		}catch (DataIntegrityViolationException e) {
@@ -60,9 +63,4 @@ public class EmployeeService {
 			entity.setEmail(obj.getEmail());
 		}	
 	}
-	
-	private Employee verifyEmployeeExistsById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with " + id));
-    }
 }
