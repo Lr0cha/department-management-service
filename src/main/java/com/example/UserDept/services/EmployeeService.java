@@ -1,7 +1,7 @@
 package com.example.UserDept.services;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.UserDept.dto.EmployeeCreateDto;
+import com.example.UserDept.dto.EmployeeEmailDto;
 import com.example.UserDept.dto.EmployeeResponseDto;
 import com.example.UserDept.dto.mapper.EmployeeMapper;
 import com.example.UserDept.entities.Department;
@@ -30,14 +31,20 @@ public class EmployeeService {
 	private DepartmentRepository dep_repository;
 	
 	@Transactional(readOnly = true)
-	public List<Employee> findAll() {
-		return repository.findAll();
-	}
+	public List<EmployeeResponseDto> findAll() {
+		List<Employee> employees = repository.findAll();
+		
+        return employees.stream()
+                        .map(EmployeeMapper::toDto)
+                        .collect(Collectors.toList()); 
+    }
 	
 	@Transactional(readOnly = true)
-	public Employee findById(Long id) {
-		Optional<Employee> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+	public EmployeeResponseDto findById(Long id) {
+		Employee emp = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+		
+		return EmployeeMapper.toDto(emp);
 	}
 	
 	@Transactional
@@ -69,22 +76,22 @@ public class EmployeeService {
 	}
 	
 	@Transactional
-	public Employee update(Long id, Employee obj) {
+	public Employee update(Long id, EmployeeEmailDto dto) {
+		
 		try {
-			Employee entity = repository.getReferenceById(id);
-			updateData(entity, obj);
-			return repository.save(entity);
+			if(!dto.getNewEmail().equals(dto.getConfirmEmail())) {
+				throw new RuntimeException("Novos emails não conferem!");
+			}
+			Employee employee = repository.findById(id).get();
+			if(!employee.getEmail().equals(dto.getCurrentEmail())) {
+				throw new RuntimeException("email atual não confere!");
+			}
+			
+			employee.setEmail(dto.getNewEmail());
+			
+			return repository.save(employee);
 		}catch(EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
 		}
-	}
-
-	private void updateData(Employee entity, Employee obj) {
-		if (obj.getName() != null && !obj.getName().trim().isEmpty()) {
-			entity.setName(obj.getName());
-		}
-		if (obj.getEmail() != null && !obj.getEmail().trim().isEmpty()) {
-			entity.setEmail(obj.getEmail());
-		}	
 	}
 }

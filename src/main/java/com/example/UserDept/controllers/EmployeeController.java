@@ -7,15 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.UserDept.dto.EmployeeCreateDto;
+import com.example.UserDept.dto.EmployeeEmailDto;
 import com.example.UserDept.dto.EmployeeResponseDto;
 import com.example.UserDept.entities.Employee;
 import com.example.UserDept.services.EmployeeService;
@@ -29,15 +30,15 @@ public class EmployeeController {
 	private EmployeeService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Employee>> findAll() {
-		List<Employee> list = service.findAll();
+	public ResponseEntity<List<EmployeeResponseDto>> findAll() {
+		List<EmployeeResponseDto> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Employee> findbyId(@PathVariable Long id){
-		Employee obj = service.findById(id);
-		return ResponseEntity.ok().body(obj);
+	public ResponseEntity<EmployeeResponseDto> findbyId(@PathVariable Long id){
+		EmployeeResponseDto dto = service.findById(id);
+		return ResponseEntity.ok().body(dto);
 	}
 	@PostMapping
 	public ResponseEntity<EmployeeResponseDto> insert(@Valid @RequestBody EmployeeCreateDto dto) {
@@ -57,9 +58,9 @@ public class EmployeeController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<Employee> update(@PathVariable long id, @Valid @RequestBody Employee obj){
-		obj = service.update(id, obj);
-		return ResponseEntity.ok().body(obj);
+	@PatchMapping(value = "/{id}")
+	public ResponseEntity<Employee> updateEmail(@PathVariable long id, @Valid @RequestBody EmployeeEmailDto dto){
+		service.update(id, dto);
+		return ResponseEntity.noContent().build();
 	}
 }
