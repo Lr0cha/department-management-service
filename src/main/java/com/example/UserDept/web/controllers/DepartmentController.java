@@ -1,4 +1,4 @@
-package com.example.UserDept.controllers;
+package com.example.UserDept.web.controllers;
 
 import java.net.URI;
 import java.util.List;

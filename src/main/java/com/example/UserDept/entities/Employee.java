@@ -12,7 +12,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_employees")
 public class Employee {
@@ -33,41 +41,6 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name = "department_id")
 	private Department department;
-	
-	public Employee() {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
 
 	@Override
 	public int hashCode() {
@@ -85,7 +58,4 @@ public class Employee {
 		Employee other = (Employee) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
 }

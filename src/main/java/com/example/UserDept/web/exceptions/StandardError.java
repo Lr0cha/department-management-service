@@ -1,4 +1,4 @@
-package com.example.UserDept.controllers.exceptions;
+package com.example.UserDept.web.exceptions;
 
 import java.time.Instant;
 

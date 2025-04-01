@@ -1,4 +1,4 @@
-package com.example.UserDept.controllers.exceptions;
+package com.example.UserDept.web.exceptions;
 
 import java.time.Instant;
 
@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.example.UserDept.services.exceptions.DatabaseException;
-import com.example.UserDept.services.exceptions.ResourceNotFoundException;
+import com.example.UserDept.exceptions.DatabaseException;
+import com.example.UserDept.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 

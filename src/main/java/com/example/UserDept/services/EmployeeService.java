@@ -8,16 +8,16 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.UserDept.dto.EmployeeCreateDto;
-import com.example.UserDept.dto.EmployeeEmailDto;
-import com.example.UserDept.dto.EmployeeResponseDto;
-import com.example.UserDept.dto.mapper.EmployeeMapper;
+import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
+import com.example.UserDept.web.dto.employee.EmployeeEmailDto;
+import com.example.UserDept.web.dto.employee.EmployeeResponseDto;
+import com.example.UserDept.web.dto.mapper.EmployeeMapper;
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.entities.Employee;
 import com.example.UserDept.repositories.DepartmentRepository;
 import com.example.UserDept.repositories.EmployeeRepository;
-import com.example.UserDept.services.exceptions.DatabaseException;
-import com.example.UserDept.services.exceptions.ResourceNotFoundException;
+import com.example.UserDept.exceptions.DatabaseException;
+import com.example.UserDept.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 

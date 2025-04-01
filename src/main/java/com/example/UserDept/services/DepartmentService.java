@@ -10,13 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.repositories.DepartmentRepository;
-import com.example.UserDept.services.exceptions.DatabaseException;
-import com.example.UserDept.services.exceptions.ResourceNotFoundException;
+import com.example.UserDept.exceptions.DatabaseException;
+import com.example.UserDept.exceptions.ResourceNotFoundException;
 
 
 
 @Service
 public class DepartmentService {
+
 	@Autowired
 	private DepartmentRepository repository;
 	

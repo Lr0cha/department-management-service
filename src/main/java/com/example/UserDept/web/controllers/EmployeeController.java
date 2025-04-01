@@ -1,4 +1,4 @@
-package com.example.UserDept.controllers;
+package com.example.UserDept.web.controllers;
 
 import java.net.URI;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.UserDept.dto.EmployeeCreateDto;
-import com.example.UserDept.dto.EmployeeEmailDto;
-import com.example.UserDept.dto.EmployeeResponseDto;
+import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
+import com.example.UserDept.web.dto.employee.EmployeeEmailDto;
+import com.example.UserDept.web.dto.employee.EmployeeResponseDto;
 import com.example.UserDept.entities.Employee;
 import com.example.UserDept.services.EmployeeService;
 
