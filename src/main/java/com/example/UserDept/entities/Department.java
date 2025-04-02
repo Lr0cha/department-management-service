@@ -24,8 +24,7 @@ public class Department {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotBlank
+
 	@Column(nullable = false, unique = true, length = 20)
 	private String name;
 
