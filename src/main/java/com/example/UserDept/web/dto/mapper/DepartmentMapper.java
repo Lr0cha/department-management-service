@@ -2,11 +2,9 @@ package com.example.UserDept.web.dto.mapper;
 
 import com.example.UserDept.entities.Department;
 import com.example.UserDept.web.dto.department.DepartmentDto;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 
-@Slf4j
 public class DepartmentMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 

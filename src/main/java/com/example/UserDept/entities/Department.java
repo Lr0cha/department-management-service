@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +26,10 @@ public class Department {
 
 	@Column(nullable = false, unique = true, length = 20)
 	private String name;
+
+	public Department(Long id){
+		this.id = id;
+	}
 
 	@Override
 	public int hashCode() {

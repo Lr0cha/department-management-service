@@ -1,28 +1,33 @@
 package com.example.UserDept.web.dto.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.example.UserDept.entities.Department;
 import org.modelmapper.ModelMapper;
 
 import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
 import com.example.UserDept.web.dto.employee.EmployeeResponseDto;
 import com.example.UserDept.entities.Employee;
+import org.modelmapper.PropertyMap;
+import org.springframework.data.domain.Page;
 
 public class EmployeeMapper {
+	private static final ModelMapper modelMapper = new ModelMapper();
+
 	public static Employee toEmployee(EmployeeCreateDto createDto) {
-		return new ModelMapper().map(createDto, Employee.class);
+		Employee emp = modelMapper.map(createDto,Employee.class);
+		emp.setId(null);
+		emp.setDepartment(new Department(createDto.getDepartmentId()));
+        return emp;
 	}
 	
 	public static EmployeeResponseDto toDto(Employee employee) {
-		EmployeeResponseDto dto = new ModelMapper().map(employee, EmployeeResponseDto.class);
+		EmployeeResponseDto dto = modelMapper.map(employee, EmployeeResponseDto.class);
 	    
-	    dto.setDepartment_name(employee.getDepartment().getName());
+	    dto.setDepartmentName(employee.getDepartment().getName());
 	    
 	    return dto;
 	}
 	
-	public static List<EmployeeResponseDto> toListDto(List<Employee> employees){
-		return employees.stream().map(EmployeeMapper::toDto).collect(Collectors.toList());
+	public static Page<EmployeeResponseDto> toListDto(Page<Employee> employees){
+		return employees.map(EmployeeMapper::toDto);
 	}
 }

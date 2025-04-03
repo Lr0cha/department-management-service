@@ -1,9 +1,10 @@
 package com.example.UserDept.web.controllers;
 
-import java.net.URI;
-import java.util.List;
-
+import com.example.UserDept.web.dto.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
 import com.example.UserDept.web.dto.employee.EmployeeEmailDto;
@@ -30,26 +30,22 @@ public class EmployeeController {
 	private EmployeeService service;
 	
 	@GetMapping
-	public ResponseEntity<List<EmployeeResponseDto>> findAll() {
-		List<EmployeeResponseDto> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+	public ResponseEntity<Page<EmployeeResponseDto>> findAll(Pageable pageable) {
+		Page<Employee> employees = service.findAll(pageable);
+		return ResponseEntity.ok().body(EmployeeMapper.toListDto(employees));
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<EmployeeResponseDto> findbyId(@PathVariable Long id){
-		EmployeeResponseDto dto = service.findById(id);
-		return ResponseEntity.ok().body(dto);
+	public ResponseEntity<EmployeeResponseDto> findById(@PathVariable Long id){
+		Employee employee = service.findById(id);
+		return ResponseEntity.ok().body(EmployeeMapper.toDto(employee));
 	}
+
 	@PostMapping
 	public ResponseEntity<EmployeeResponseDto> insert(@Valid @RequestBody EmployeeCreateDto dto) {
-        EmployeeResponseDto emp = service.insert(dto);
+        Employee emp = service.insert(EmployeeMapper.toEmployee(dto));
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(emp.getId())
-                .toUri();
-        
-        return ResponseEntity.created(uri).body(emp);
+        return ResponseEntity.status(HttpStatus.CREATED).body(EmployeeMapper.toDto(emp));
     }
 	
 	@DeleteMapping(value = "/{id}")
@@ -59,8 +55,8 @@ public class EmployeeController {
 	}
 	
 	@PatchMapping(value = "/{id}")
-	public ResponseEntity<Employee> updateEmail(@PathVariable long id, @Valid @RequestBody EmployeeEmailDto dto){
-		service.update(id, dto);
+	public ResponseEntity<Void> updateEmail(@PathVariable long id, @Valid @RequestBody EmployeeEmailDto dto){
+		service.updateEmail(id, dto.getCurrentEmail(),dto.getNewEmail());
 		return ResponseEntity.noContent().build();
 	}
 }
