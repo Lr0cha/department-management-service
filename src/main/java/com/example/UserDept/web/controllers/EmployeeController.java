@@ -1,5 +1,6 @@
 package com.example.UserDept.web.controllers;
 
+import com.example.UserDept.web.dto.employee.EmployeePhoneDto;
 import com.example.UserDept.web.dto.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,9 +55,15 @@ public class EmployeeController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PatchMapping(value = "/{id}")
+	@PatchMapping(value = "/email/{id}")
 	public ResponseEntity<Void> updateEmail(@PathVariable long id, @Valid @RequestBody EmployeeEmailDto dto){
 		service.updateEmail(id, dto.getCurrentEmail(),dto.getNewEmail());
+		return ResponseEntity.noContent().build();
+	}
+
+	@PatchMapping(value = "/phone/{id}")
+	public ResponseEntity<Void> updatePhoneNumber(@PathVariable long id, @Valid @RequestBody EmployeePhoneDto phoneDto){
+		service.updatePhone(id, phoneDto.getPhone());
 		return ResponseEntity.noContent().build();
 	}
 }

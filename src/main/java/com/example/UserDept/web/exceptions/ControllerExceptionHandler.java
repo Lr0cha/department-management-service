@@ -31,10 +31,17 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}
 
-	@ExceptionHandler({MethodArgumentNotValidException.class, InvalidDataException.class})
-	public ResponseEntity<StandardError> ArgumentNotValidException(RuntimeException ex, HttpServletRequest request, BindingResult result) {
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<StandardError> MethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request, BindingResult result) {
 		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
 		StandardError err = new StandardError(Instant.now(), status.value(), "Campo inválido(s)", request.getRequestURI(), result);
+		return ResponseEntity.status(status).body(err);
+	}
+
+	@ExceptionHandler(InvalidDataException.class)
+	public ResponseEntity<StandardError> InvalidDataException(InvalidDataException ex, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		StandardError err = new StandardError(Instant.now(), status.value(), ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 }

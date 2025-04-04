@@ -30,6 +30,7 @@ public class StandardError {
 		this.message = message;
 		this.path = path;
 	}
+
 	public StandardError(Instant timestamp, Integer status, String message, String path, BindingResult result) {
 		this(timestamp, status, message, path);
 		addErrors(result);

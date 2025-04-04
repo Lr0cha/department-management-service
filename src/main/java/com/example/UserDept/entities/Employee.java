@@ -2,14 +2,8 @@ package com.example.UserDept.entities;
 
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.example.UserDept.entities.enums.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +27,13 @@ public class Employee {
 
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
+
+	@Column(nullable = false, unique = true)
+	private String phoneNumber;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	private Role role = Role.COMMON;
 	
 	@ManyToOne
 	@JoinColumn(name = "department_id")
