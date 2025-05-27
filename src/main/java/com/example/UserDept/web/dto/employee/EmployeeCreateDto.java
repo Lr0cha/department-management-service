@@ -21,6 +21,16 @@ public class EmployeeCreateDto {
 	@Pattern(regexp = "^\\(\\d{2}\\) \\d{5}-\\d{4}$", message = "Número de celular inválido. O formato deve ser (XX) XXXXX-XXXX")
 	private String phoneNumber;
 
+	@NotBlank
+	@Pattern(
+			message = "Formato do cep inválido",
+			regexp = "^(([0-9]{2}\\.[0-9]{3}-[0-9]{3})|([0-9]{5}-[0-9]{3})|([0-9]{8}))$"
+	)
+	private String zipCode;
+
+	@NotNull
+	private Integer numberHouse;
+
 	@NotNull
 	private Long departmentId;
 }

@@ -1,6 +1,6 @@
 package com.example.UserDept.web.dto.mapper;
 
-import com.example.UserDept.entities.Department;
+import com.example.UserDept.entities.department.Department;
 import com.example.UserDept.web.dto.department.DepartmentDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

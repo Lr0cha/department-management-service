@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
 import com.example.UserDept.web.dto.employee.EmployeeEmailDto;
 import com.example.UserDept.web.dto.employee.EmployeeResponseDto;
-import com.example.UserDept.entities.Employee;
+import com.example.UserDept.entities.employee.Employee;
 import com.example.UserDept.services.EmployeeService;
 
 import jakarta.validation.Valid;

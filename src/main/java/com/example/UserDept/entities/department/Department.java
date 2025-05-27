@@ -1,4 +1,4 @@
-package com.example.UserDept.entities;
+package com.example.UserDept.entities.department;
 
 import java.util.Objects;
 

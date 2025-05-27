@@ -1,7 +1,9 @@
-package com.example.UserDept.entities;
+package com.example.UserDept.entities.employee;
 
 import java.util.Objects;
 
+import com.example.UserDept.entities.department.Department;
+import com.example.UserDept.entities.employee.embedded.Address;
 import com.example.UserDept.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +40,9 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name = "department_id")
 	private Department department;
+
+	@Embedded
+	private Address address;
 
 	@Override
 	public int hashCode() {

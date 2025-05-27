@@ -1,5 +1,6 @@
 package com.example.UserDept.services;
 
+import com.example.UserDept.entities.employee.embedded.Address;
 import com.example.UserDept.exceptions.InvalidDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.UserDept.entities.Employee;
+import com.example.UserDept.entities.employee.Employee;
 import com.example.UserDept.repositories.EmployeeRepository;
 import com.example.UserDept.exceptions.DatabaseConflictException;
 import com.example.UserDept.exceptions.ResourceNotFoundException;
@@ -22,6 +23,9 @@ public class EmployeeService {
 
 	@Autowired
 	private DepartmentService deptService;
+
+	@Autowired
+	private AddressService addressService;
 
 	@Transactional(readOnly = true)
 	public Page<Employee> findAll(Pageable pageable) {
@@ -46,6 +50,11 @@ public class EmployeeService {
 			log.error("Email {} já existe",emp.getEmail());
 			throw new DatabaseConflictException(String.format("Email '%s' já existe no sistema", emp.getEmail()));
 		}
+
+		Address address =  addressService.getAddressByZipCode(emp.getAddress().getZipCode());
+		address.setHouseNumber(emp.getAddress().getHouseNumber());
+
+		emp.setAddress(address);
 
 		return repository.save(emp);
 	}

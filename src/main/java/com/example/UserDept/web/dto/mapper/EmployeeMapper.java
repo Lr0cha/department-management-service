@@ -1,12 +1,12 @@
 package com.example.UserDept.web.dto.mapper;
 
-import com.example.UserDept.entities.Department;
+import com.example.UserDept.entities.department.Department;
+import com.example.UserDept.entities.employee.embedded.Address;
 import org.modelmapper.ModelMapper;
 
 import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
 import com.example.UserDept.web.dto.employee.EmployeeResponseDto;
-import com.example.UserDept.entities.Employee;
-import org.modelmapper.PropertyMap;
+import com.example.UserDept.entities.employee.Employee;
 import org.springframework.data.domain.Page;
 
 public class EmployeeMapper {
@@ -16,6 +16,9 @@ public class EmployeeMapper {
 		Employee emp = modelMapper.map(createDto,Employee.class);
 		emp.setId(null);
 		emp.setDepartment(new Department(createDto.getDepartmentId()));
+		emp.setAddress(new Address());
+		emp.getAddress().setZipCode(createDto.getZipCode());
+		emp.getAddress().setHouseNumber(createDto.getNumberHouse());
         return emp;
 	}
 	
@@ -23,7 +26,7 @@ public class EmployeeMapper {
 		EmployeeResponseDto dto = modelMapper.map(employee, EmployeeResponseDto.class);
 	    
 	    dto.setDepartmentName(employee.getDepartment().getName());
-	    
+
 	    return dto;
 	}
 	
