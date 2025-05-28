@@ -1,6 +1,7 @@
 package com.example.UserDept.web.controllers;
 
-import com.example.UserDept.web.dto.employee.EmployeePhoneDto;
+import com.example.UserDept.web.dto.address.UpdateAddressDto;
+import com.example.UserDept.web.dto.employee.*;
 import com.example.UserDept.web.dto.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.UserDept.web.dto.employee.EmployeeCreateDto;
-import com.example.UserDept.web.dto.employee.EmployeeEmailDto;
-import com.example.UserDept.web.dto.employee.EmployeeResponseDto;
 import com.example.UserDept.entities.employee.Employee;
 import com.example.UserDept.services.EmployeeService;
 
@@ -62,8 +60,20 @@ public class EmployeeController {
 	}
 
 	@PatchMapping(value = "/phone/{id}")
-	public ResponseEntity<Void> updatePhoneNumber(@PathVariable long id, @Valid @RequestBody EmployeePhoneDto phoneDto){
-		service.updatePhone(id, phoneDto.getPhone());
+	public ResponseEntity<Void> updatePhone(@PathVariable long id, @Valid @RequestBody EmployeePhoneDto dto){
+		service.updatePhone(id, dto.getPhone());
+		return ResponseEntity.noContent().build();
+	}
+
+	@PatchMapping(value = "/address/{id}")
+	public ResponseEntity<Void> updateAddress(@PathVariable long id, @Valid @RequestBody UpdateAddressDto dto){
+		service.updateAddress(id, dto.getZipCode(), dto.getHouseNumber());
+		return ResponseEntity.noContent().build();
+	}
+
+	@PatchMapping(value = "/department/{id}")
+	public ResponseEntity<Void> updateDepartment(@PathVariable long id, @Valid @RequestBody EmployeeDepartmentDto dto){
+		service.updateDepartment(id, dto.getDepartmentId());
 		return ResponseEntity.noContent().build();
 	}
 }

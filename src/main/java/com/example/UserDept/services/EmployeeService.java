@@ -46,11 +46,10 @@ public class EmployeeService {
 	public Employee insert(Employee emp) {
 		emp.setDepartment(deptService.findById(emp.getDepartment().getId()));
 
-		if (repository.findByEmail(emp.getEmail()) != null) {
+		if (repository.findByEmail(emp.getEmail()) != null) { //unique
 			log.error("Email {} já existe",emp.getEmail());
 			throw new DatabaseConflictException(String.format("Email '%s' já existe no sistema", emp.getEmail()));
 		}
-
 		Address address =  addressService.getAddressByZipCode(emp.getAddress().getZipCode());
 		address.setHouseNumber(emp.getAddress().getHouseNumber());
 
@@ -92,6 +91,24 @@ public class EmployeeService {
 
 		log.info("Mudança do telefone {} para {}", emp.getPhoneNumber(), newPhoneNumber);
 		emp.setPhoneNumber(newPhoneNumber);
+
+		repository.save(emp);
+	}
+
+	@Transactional
+	public void updateAddress(Long id, String newZipCode, Integer houseNumber) {
+		Employee emp = findById(id);
+
+		emp.setAddress(addressService.getAddressByZipCode(newZipCode));
+		emp.getAddress().setHouseNumber(houseNumber);
+		repository.save(emp);
+	}
+
+	@Transactional
+	public void updateDepartment(Long id, Long departmentId) {
+		Employee emp = findById(id);
+
+		emp.setDepartment(deptService.findById(departmentId));
 
 		repository.save(emp);
 	}

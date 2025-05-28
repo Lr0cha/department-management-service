@@ -18,13 +18,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_department")
+@Table(name = "tb_departments")
 public class Department {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, unique = true, length = 20)
+	@Column(nullable = false, unique = true, length = 100)
 	private String name;
 
 	public Department(Long id){
@@ -47,6 +47,6 @@ public class Department {
 		Department other = (Department) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
+
 }

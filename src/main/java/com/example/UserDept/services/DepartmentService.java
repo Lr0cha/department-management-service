@@ -53,7 +53,7 @@ public class DepartmentService {
 	public void delete(Long id) {
 		findById(id);
 		if(empService.hasDependentEmployees(id)){
-			throw new DatabaseConflictException("O dep");
+			throw new DatabaseConflictException("O departamento não pode ser excluído, pois tem empregados associados");
 		}
 		repository.deleteById(id);
 	}
