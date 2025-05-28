@@ -1,6 +1,5 @@
 package com.example.UserDept.services;
 
-import com.example.UserDept.entities.employee.embedded.Address;
 import com.example.UserDept.exceptions.InvalidDataException;
 import com.example.UserDept.repositories.specifications.EmployeeSpecification;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,8 @@ import com.example.UserDept.entities.employee.Employee;
 import com.example.UserDept.repositories.EmployeeRepository;
 import com.example.UserDept.exceptions.DatabaseConflictException;
 import com.example.UserDept.exceptions.ResourceNotFoundException;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -49,14 +50,11 @@ public class EmployeeService {
 	public Employee insert(Employee emp) {
 		emp.setDepartment(deptService.findById(emp.getDepartment().getId()));
 
-		if (repository.findByEmail(emp.getEmail()) != null) { //unique
-			log.error("Email {} já existe",emp.getEmail());
-			throw new DatabaseConflictException(String.format("Email '%s' já existe no sistema", emp.getEmail()));
-		}
-		Address address =  addressService.getAddressByZipCode(emp.getAddress().getZipCode());
-		address.setHouseNumber(emp.getAddress().getHouseNumber());
+		validateUniqueEmail(emp.getEmail());
 
-		emp.setAddress(address);
+		validateUniquePhone(emp.getPhoneNumber());
+
+		emp.setAddress(addressService.getAddressByZipCode(emp.getAddress().getZipCode()));
 
 		return repository.save(emp);
 	}
@@ -71,9 +69,12 @@ public class EmployeeService {
 	public void updateEmail(Long id, String currentEmail, String newEmail) {
 		Employee emp = findById(id);
 
-		if (emp.getEmail().equals(newEmail)) {
+		if (Objects.equals(emp.getEmail(), newEmail)) {
 			return;
 		}
+
+		validateUniqueEmail(newEmail);
+
 		if (!emp.getEmail().equals(currentEmail)) {
 			throw new InvalidDataException("Email atual incorreto!");
 		}
@@ -84,6 +85,7 @@ public class EmployeeService {
 		repository.save(emp);
 	}
 
+
 	@Transactional
 	public void updatePhone(Long id, String newPhoneNumber) {
 		Employee emp = findById(id);
@@ -91,6 +93,8 @@ public class EmployeeService {
 		if(emp.getPhoneNumber().equals(newPhoneNumber)){
 			return;
 		}
+
+		validateUniquePhone(newPhoneNumber);
 
 		log.info("Mudança do telefone {} para {}", emp.getPhoneNumber(), newPhoneNumber);
 		emp.setPhoneNumber(newPhoneNumber);
@@ -114,6 +118,18 @@ public class EmployeeService {
 		emp.setDepartment(deptService.findById(departmentId));
 
 		repository.save(emp);
+	}
+
+	private void validateUniqueEmail(String email) {
+		if (repository.findByEmail(email) != null) {
+			throw new DatabaseConflictException(String.format("Email '%s' já existe no sistema", email));
+		}
+	}
+
+	private void validateUniquePhone(String phone) {
+		if (repository.findByPhoneNumber(phone) != null) {
+			throw new DatabaseConflictException(String.format("Número de celular: '%s' já existe no sistema", phone));
+		}
 	}
 
 	protected boolean hasDependentEmployees(Long departmentId) {

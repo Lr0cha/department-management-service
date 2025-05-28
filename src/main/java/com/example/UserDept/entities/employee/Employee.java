@@ -30,7 +30,7 @@ public class Employee {
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 
-	@Column(nullable = false, unique = true)
+	@Column(name = "phone_number", nullable = false, unique = true)
 	private String phoneNumber;
 
 	@Enumerated(EnumType.STRING)
