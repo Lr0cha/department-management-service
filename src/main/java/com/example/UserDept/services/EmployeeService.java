@@ -2,10 +2,12 @@ package com.example.UserDept.services;
 
 import com.example.UserDept.entities.employee.embedded.Address;
 import com.example.UserDept.exceptions.InvalidDataException;
+import com.example.UserDept.repositories.specifications.EmployeeSpecification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +30,9 @@ public class EmployeeService {
 	private AddressService addressService;
 
 	@Transactional(readOnly = true)
-	public Page<Employee> findAll(Pageable pageable) {
-		return repository.findAll(pageable);
+	public Page<Employee> findAll(String name, String deptName, Pageable pageable) {
+		Specification<Employee> spec = EmployeeSpecification.withFilters(name, deptName);
+		return repository.findAll(spec, pageable);
 	}
 
 	@Transactional(readOnly = true)
