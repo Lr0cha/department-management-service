@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +55,9 @@ public class EmployeeService {
 
 		validateUniquePhone(emp.getPhoneNumber());
 
-		emp.setAddress(addressService.getAddressByZipCode(emp.getAddress().getZipCode()));
+		emp.setAddress(addressService.getAddressByZipCode(emp.getAddress().getZipCode(), emp.getAddress().getHouseNumber()));
+
+		emp.setPassword(new BCryptPasswordEncoder().encode(emp.getPassword()));
 
 		return repository.save(emp);
 	}
@@ -106,8 +109,7 @@ public class EmployeeService {
 	public void updateAddress(Long id, String newZipCode, Integer houseNumber) {
 		Employee emp = findById(id);
 
-		emp.setAddress(addressService.getAddressByZipCode(newZipCode));
-		emp.getAddress().setHouseNumber(houseNumber);
+		emp.setAddress(addressService.getAddressByZipCode(newZipCode, houseNumber));
 		repository.save(emp);
 	}
 

@@ -14,7 +14,7 @@ public class AddressService {
         this.webClient = builder.baseUrl("https://viacep.com.br/ws").build();
     }
 
-    public Address getAddressByZipCode(String zipCode) {
+    public Address getAddressByZipCode(String zipCode, Integer houseNumber) {
 
         ViaCepResponse response = webClient
                 .get()
@@ -33,6 +33,7 @@ public class AddressService {
         address.setNeighborhood(response.getBairro());
         address.setCity(response.getLocalidade());
         address.setState(response.getUf());
+        address.setHouseNumber(houseNumber);
 
         return address;
     }

@@ -18,7 +18,7 @@ public class EmployeeMapper {
 		emp.setDepartment(new Department(createDto.getDepartmentId()));
 		emp.setAddress(new Address());
 		emp.getAddress().setZipCode(createDto.getZipCode());
-		emp.getAddress().setHouseNumber(createDto.getNumberHouse());
+		emp.getAddress().setHouseNumber(createDto.getHouseNumber());
         return emp;
 	}
 	
