@@ -1,5 +1,7 @@
 package com.example.UserDept.entities.employee;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import com.example.UserDept.entities.department.Department;
@@ -10,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Setter
@@ -17,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_employees")
-public class Employee {
+public class Employee implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +34,9 @@ public class Employee {
 
 	@Column(nullable = false, unique = true, length = 100)
 	private String email;
+
+	@Column(nullable = false)
+	private String password;
 
 	@Column(name = "phone_number", nullable = false, unique = true)
 	private String phoneNumber;
@@ -59,5 +67,16 @@ public class Employee {
 			return false;
 		Employee other = (Employee) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if (this.role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 }

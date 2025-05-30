@@ -1,9 +1,6 @@
 package com.example.UserDept.web.dto.employee;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +15,10 @@ public class EmployeeCreateDto {
 	private String email;
 
 	@NotBlank
+	@Size(min = 6, max = 20)
+	private String password;
+
+	@NotBlank
 	@Pattern(regexp = "^\\(\\d{2}\\) \\d{5}-\\d{4}$", message = "Número de celular inválido. O formato deve ser (XX) XXXXX-XXXX")
 	private String phoneNumber;
 
@@ -29,7 +30,7 @@ public class EmployeeCreateDto {
 	private String zipCode;
 
 	@NotNull
-	private Integer numberHouse;
+	private Integer houseNumber;
 
 	@NotNull
 	private Long departmentId;

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.UserDept.entities.employee.Employee;
@@ -15,6 +16,7 @@ import com.example.UserDept.services.EmployeeService;
 
 import jakarta.validation.Valid;
 
+@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping(value = "/employees")
 public class EmployeeController {
@@ -28,7 +30,8 @@ public class EmployeeController {
 		Page<Employee> employees = service.findAll(name, departmentName, pageable);
 		return ResponseEntity.ok().body(EmployeeMapper.toListDto(employees));
 	}
-	
+
+	@PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<EmployeeResponseDto> findById(@PathVariable Long id){
 		Employee employee = service.findById(id);
