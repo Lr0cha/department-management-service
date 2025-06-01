@@ -1,5 +1,6 @@
 package com.example.UserDept.config.security;
 
+import com.example.UserDept.exceptions.InvalidTokenException;
 import com.example.UserDept.repositories.EmployeeRepository;
 import com.example.UserDept.services.TokenService;
 import jakarta.servlet.FilterChain;
@@ -26,15 +27,26 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        if(token != null){
-            var subject = tokenService.validateToken(token);
-            UserDetails user = empRepository.findByEmail(subject);
+        String token = recoverToken(request);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (token != null) {
+            try {
+                String subject = tokenService.validateToken(token);
+
+                UserDetails user = empRepository.findByEmail(subject);
+
+                if (user != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(
+                            user, null, user.getAuthorities()
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                throw new InvalidTokenException("Invalid or expired token.");
+            }
         }
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request){
