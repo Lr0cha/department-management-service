@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import com.example.UserDept.audit.Auditable;
 import com.example.UserDept.entities.department.Department;
 import com.example.UserDept.entities.employee.embedded.Address;
 import com.example.UserDept.entities.enums.Role;
@@ -22,7 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_employees")
-public class Employee implements UserDetails {
+public class Employee extends Auditable implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

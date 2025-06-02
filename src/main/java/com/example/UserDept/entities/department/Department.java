@@ -2,6 +2,7 @@ package com.example.UserDept.entities.department;
 
 import java.util.Objects;
 
+import com.example.UserDept.audit.Auditable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_departments")
-public class Department {
+public class Department extends Auditable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
