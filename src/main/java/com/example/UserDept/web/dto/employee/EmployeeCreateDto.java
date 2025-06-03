@@ -11,7 +11,7 @@ public class EmployeeCreateDto {
 	private String name;
 
 	@NotBlank
-	@Email(message = "Formato do email inválido", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+	@Email(message = "Invalid email format", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
 	private String email;
 
 	@NotBlank
@@ -19,19 +19,21 @@ public class EmployeeCreateDto {
 	private String password;
 
 	@NotBlank
-	@Pattern(regexp = "^\\(\\d{2}\\) \\d{5}-\\d{4}$", message = "Número de celular inválido. O formato deve ser (XX) XXXXX-XXXX")
+	@Pattern(regexp = "^\\(\\d{2}\\) \\d{5}-\\d{4}$", message = "Invalid mobile number. The format should be (XX) XXXXX-XXXX")
 	private String phoneNumber;
 
 	@NotBlank
 	@Pattern(
-			message = "Formato do cep inválido",
+			message = "Invalid cep format",
 			regexp = "^(([0-9]{2}\\.[0-9]{3}-[0-9]{3})|([0-9]{5}-[0-9]{3})|([0-9]{8}))$"
 	)
 	private String zipCode;
 
 	@NotNull
+	@Positive
 	private Integer houseNumber;
 
 	@NotNull
+	@Positive
 	private Long departmentId;
 }

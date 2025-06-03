@@ -2,6 +2,8 @@ package com.example.UserDept.services;
 
 import com.example.UserDept.exceptions.InvalidDataException;
 import com.example.UserDept.repositories.specifications.EmployeeSpecification;
+import com.example.UserDept.web.dto.employee.EmployeeUpdateDto;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -69,55 +71,43 @@ public class EmployeeService {
 	}
 
 	@Transactional
-	public void updateEmail(Long id, String currentEmail, String newEmail) {
+	public void update(Long id, EmployeeUpdateDto dto) {
 		Employee emp = findById(id);
 
-		if (Objects.equals(emp.getEmail(), newEmail)) {
-			return;
+		if (StringUtils.isNotBlank(dto.getNewEmail())) {
+			if (!dto.getNewEmail().equals(emp.getEmail())) {
+				validateUniqueEmail(dto.getNewEmail());
+
+				if (!emp.getEmail().equals(dto.getCurrentEmail())) {
+					throw new InvalidDataException("Incorrect email!");
+				}
+
+				emp.setEmail(dto.getNewEmail());
+			}
 		}
 
-		validateUniqueEmail(newEmail);
+		if (StringUtils.isNotBlank(dto.getNewPassword())) {
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-		if (!emp.getEmail().equals(currentEmail)) {
-			throw new InvalidDataException("Email atual incorreto!");
+			if (!passwordEncoder.matches(dto.getCurrentPassword(), emp.getPassword())) {
+				throw new InvalidDataException("Incorrect password!");
+			}
+
+			emp.setPassword(passwordEncoder.encode(dto.getNewPassword()));
 		}
 
-		log.info("Mudança do email {} para {}", emp.getEmail(), newEmail);
-		emp.setEmail(newEmail);
-
-		repository.save(emp);
-	}
-
-
-	@Transactional
-	public void updatePhone(Long id, String newPhoneNumber) {
-		Employee emp = findById(id);
-
-		if(emp.getPhoneNumber().equals(newPhoneNumber)){
-			return;
+		if (StringUtils.isNotBlank(dto.getPhoneNumber())) {
+			validateUniquePhone(dto.getPhoneNumber());
+			emp.setPhoneNumber(dto.getPhoneNumber());
 		}
 
-		validateUniquePhone(newPhoneNumber);
+		if (dto.getDepartmentId() != null) {
+			emp.setDepartment(deptService.findById(dto.getDepartmentId()));
+		}
 
-		log.info("Mudança do telefone {} para {}", emp.getPhoneNumber(), newPhoneNumber);
-		emp.setPhoneNumber(newPhoneNumber);
-
-		repository.save(emp);
-	}
-
-	@Transactional
-	public void updateAddress(Long id, String newZipCode, Integer houseNumber) {
-		Employee emp = findById(id);
-
-		emp.setAddress(addressService.getAddressByZipCode(newZipCode, houseNumber));
-		repository.save(emp);
-	}
-
-	@Transactional
-	public void updateDepartment(Long id, Long departmentId) {
-		Employee emp = findById(id);
-
-		emp.setDepartment(deptService.findById(departmentId));
+		if (StringUtils.isNotBlank(dto.getZipCode()) && dto.getHouseNumber() != null) {
+			emp.setAddress(addressService.getAddressByZipCode(dto.getZipCode(), dto.getHouseNumber()));
+		}
 
 		repository.save(emp);
 	}

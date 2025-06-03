@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class LoginRequestDto {
     @NotBlank
-    @Email(message = "Formato do email inválido", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+    @Email(message = "Invalid email format", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
     private String email;
 
     @NotBlank

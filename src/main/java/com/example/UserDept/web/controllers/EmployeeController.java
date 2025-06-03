@@ -1,7 +1,6 @@
 package com.example.UserDept.web.controllers;
 
 import com.example.UserDept.entities.enums.Role;
-import com.example.UserDept.web.dto.address.UpdateAddressDto;
 import com.example.UserDept.web.dto.employee.*;
 import com.example.UserDept.web.dto.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,55 +58,15 @@ public class EmployeeController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping(value = "/email/{id}")
+	@PatchMapping(value = "/{id}")
 	public ResponseEntity<Void> updateEmail(@PathVariable long id,
-											@Valid @RequestBody EmployeeEmailDto dto,
+											@Valid @RequestBody EmployeeUpdateDto dto,
 											@AuthenticationPrincipal Employee currentUser) {
 		if (!canUpdateOrDelete(id, currentUser)) {
 			throw new AuthorizationDeniedException("Do not have access.");
 		}
 
-		service.updateEmail(id, dto.getCurrentEmail(), dto.getNewEmail());
-		return ResponseEntity.noContent().build();
-	}
-
-	@PatchMapping(value = "/phone/{id}")
-	public ResponseEntity<Void> updatePhone(@PathVariable long id,
-											@Valid @RequestBody EmployeePhoneDto dto,
-											@AuthenticationPrincipal Employee currentUser){
-
-		if (!canUpdateOrDelete(id, currentUser)) {
-			throw new AuthorizationDeniedException("Do not have access.");
-		}
-
-		service.updatePhone(id, dto.getPhone());
-		return ResponseEntity.noContent().build();
-	}
-
-	@PatchMapping(value = "/address/{id}")
-	public ResponseEntity<Void> updateAddress(@PathVariable long id,
-											  @Valid @RequestBody UpdateAddressDto dto,
-											  @AuthenticationPrincipal Employee currentUser){
-
-
-		if (!canUpdateOrDelete(id, currentUser)) {
-			throw new AuthorizationDeniedException("Do not have access.");
-		}
-
-		service.updateAddress(id, dto.getZipCode(), dto.getHouseNumber());
-		return ResponseEntity.noContent().build();
-	}
-
-	@PatchMapping(value = "/department/{id}")
-	public ResponseEntity<Void> updateDepartment(@PathVariable long id,
-												 @Valid @RequestBody EmployeeDepartmentDto dto,
-												 @AuthenticationPrincipal Employee currentUser){
-
-		if (!canUpdateOrDelete(id, currentUser)) {
-			throw new AuthorizationDeniedException("Do not have access.");
-		}
-
-		service.updateDepartment(id, dto.getDepartmentId());
+		service.update(id, dto);
 		return ResponseEntity.noContent().build();
 	}
 
