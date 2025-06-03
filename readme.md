@@ -9,8 +9,12 @@ Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite
 
 - ✅ Cadastro e gerenciamento de departamentos e empregados  
 - ✅ Vinculação de empregado a um departamento  
-- ✅ Autenticação e autorização com Spring Security + JWT  
+- ✅ Autenticação e autorização com Spring Security + JWT
+- ✅ Paginação e ordenação com `Pageable` nos endpoints de listagem
 - ✅ Filtragem com Specification  
+- ✅ Validações personalizadas para atualização de dados (email, senha, endereço)
+- ✅ Integração com **ViaCEP** via `WebClient` para buscar endereço por CEP
+- ✅ Auditoria automática (usuário e data de criação/atualização)
 - ✅ Validações e tratamento global de erros  
 - ✅ Banco de dados PostgreSQL com Docker Compose  
 - ✅ Controle de acesso baseado em papéis (`ADMIN` e `COMMON`)
@@ -47,27 +51,36 @@ Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite
 | PostgreSQL       | Banco de dados relacional           |
 | Maven            | Gerenciador de dependências         |
 | Docker Compose   | Conteinerização (banco e aplicação) |
-
+| WebClient        | Cliente HTTP reativo (ViaCEP)       |
 </div>
 
 ## <div align=center>📂 Estrutura de Endpoints (parcial)</div>
 
 <div align="center">
 
-| Método | Endpoint                  | Papel necessário |
-|--------|---------------------------|------------------|
-| POST   | `/login`                  | PUBLIC           |
-| GET    | `/employees`              | ADMIN            |
-| GET    | `/employees/{id}`         | ADMIN / COMMON   |
-| POST   | `/employees`              | ADMIN            |
-| PATCH  | `/employees/{field}/{id}` | ADMIN            |
-| DELETE | `/employees/{id}`         | ADMIN            |
-| GET    | `/departments`            | ADMIN            |
-| GET    | `/departments/{id}`       | ADMIN            |
-| POST   | `/departments`            | ADMIN            |
-| DELETE | `/departments/{id}`       | ADMIN            |
+| Método | Endpoint            | Papel necessário |
+|--------|---------------------|------------------|
+| POST   | `/login`            | PUBLIC           |
+| GET    | `/employees`        | ADMIN            |
+| GET    | `/employees/{id}`   | ADMIN / COMMON   |
+| POST   | `/employees`        | ADMIN            |
+| PATCH  | `/employees/{id}`   | ADMIN            |
+| DELETE | `/employees/{id}`   | ADMIN            |
+| GET    | `/departments`      | ADMIN            |
+| GET    | `/departments/{id}` | ADMIN            |
+| POST   | `/departments`      | ADMIN            |
+| DELETE | `/departments/{id}` | ADMIN            |
 
 </div>
+
+## ✨ Detalhes do Novo Endpoint de Atualização
+
+- O endpoint `PATCH /employees/{id}` substitui atualizações parciais separadas.
+- Permite atualizar telefone, departamento, endereço, email e senha com regras específicas:
+    - Para atualizar **email**, é necessário informar o email atual.
+    - Para atualizar **senha**, são necessários: senha atual, nova senha e confirmação.
+    - Para atualizar o **endereço**, é obrigatório enviar o CEP e o número da residência juntos.
+- Todas essas validações são feitas com um **validador personalizado**.
 
 ## 📝 Observações
 
