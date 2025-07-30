@@ -1,8 +1,16 @@
 package com.example.UserDept.web.controllers;
 
+import com.example.UserDept.config.security.CustomAccessDeniedHandler;
+import com.example.UserDept.config.security.CustomAuthenticationEntryPoint;
 import com.example.UserDept.entities.enums.Role;
 import com.example.UserDept.web.dto.employee.*;
 import com.example.UserDept.web.dto.mapper.EmployeeMapper;
+import com.example.UserDept.web.exceptions.StandardError;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +29,19 @@ import jakarta.validation.Valid;
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping(value = "/employees")
+@Tag(name = "Employee", description = "Todas as operações relativas a cadastro, leitura, atualização e exclusão de um funcionário/admin")
 public class EmployeeController {
 	@Autowired
 	private EmployeeService service;
-	
+
+	@Operation(summary="Obter todos os funcionários", description = "Obter funcionários com opções de parâmetros", responses = {
+			@ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponseDto.class))),
+			@ApiResponse(responseCode = "401", description = "Recurso não autorizado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAuthenticationEntryPoint.class))),
+			@ApiResponse(responseCode = "403", description = "Recurso proibido",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAccessDeniedHandler.class))),
+	})
 	@GetMapping
 	public ResponseEntity<Page<EmployeeResponseDto>> findAll(@RequestParam(required = false) String name,
 															 @RequestParam(required = false) String departmentName,
@@ -33,6 +50,16 @@ public class EmployeeController {
 		return ResponseEntity.ok().body(EmployeeMapper.toListDto(employees));
 	}
 
+	@Operation(summary="Obter funcionário pelo id",responses = {
+			@ApiResponse(responseCode = "200", description = "Recurso encontrado com sucesso",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponseDto.class))),
+			@ApiResponse(responseCode = "401", description = "Recurso não autorizado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAuthenticationEntryPoint.class))),
+			@ApiResponse(responseCode = "403", description = "Recurso proibido",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAccessDeniedHandler.class))),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
+	})
 	@PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<EmployeeResponseDto> findById(@PathVariable Long id){
@@ -40,13 +67,35 @@ public class EmployeeController {
 		return ResponseEntity.ok().body(EmployeeMapper.toDto(employee));
 	}
 
+	@Operation(summary="Criar funcionário",responses = {
+			@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponseDto.class))),
+			@ApiResponse(responseCode = "401", description = "Recurso não autorizado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAuthenticationEntryPoint.class))),
+			@ApiResponse(responseCode = "403", description = "Recurso proibido",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAccessDeniedHandler.class))),
+			@ApiResponse(responseCode = "409", description = "Recurso com conflito",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
+			@ApiResponse(responseCode = "422", description = "Recurso não processado por dados de entrada inválidos",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
+	})
 	@PostMapping
 	public ResponseEntity<EmployeeResponseDto> insert(@Valid @RequestBody EmployeeCreateDto dto) {
         Employee emp = service.insert(EmployeeMapper.toEmployee(dto));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(EmployeeMapper.toDto(emp));
     }
-	
+
+	@Operation(summary="Apagar funcionário pelo id",responses = {
+			@ApiResponse(responseCode = "204", description = "Recurso excluido com sucesso",
+					content = @Content(mediaType = "application/json", schema = @Schema())),
+			@ApiResponse(responseCode = "401", description = "Recurso não autorizado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAuthenticationEntryPoint.class))),
+			@ApiResponse(responseCode = "403", description = "Recurso proibido",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAccessDeniedHandler.class))),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
+	})
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id,
 									   @AuthenticationPrincipal Employee currentUser){
@@ -58,8 +107,19 @@ public class EmployeeController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Operation(summary="Atualizar funcionário",description = "recurso para atualizar principais campos do funcionário",responses = {
+			@ApiResponse(responseCode = "204", description = "Recurso criado com sucesso",
+					content = @Content(mediaType = "application/json", schema = @Schema())),
+			@ApiResponse(responseCode = "401", description = "Recurso não autorizado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAuthenticationEntryPoint.class))),
+			@ApiResponse(responseCode = "403", description = "Recurso proibido",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAccessDeniedHandler.class))),
+			@ApiResponse(responseCode = "409", description = "Recurso com conflito",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
+	})
+	@PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
 	@PatchMapping(value = "/{id}")
-	public ResponseEntity<Void> updateEmail(@PathVariable long id,
+	public ResponseEntity<Void> update(@PathVariable long id,
 											@Valid @RequestBody EmployeeUpdateDto dto,
 											@AuthenticationPrincipal Employee currentUser) {
 		if (!canUpdateOrDelete(id, currentUser)) {

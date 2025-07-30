@@ -114,13 +114,13 @@ public class EmployeeService {
 
 	private void validateUniqueEmail(String email) {
 		if (repository.findByEmail(email) != null) {
-			throw new DatabaseConflictException(String.format("Email '%s' já existe no sistema", email));
+			throw new DatabaseConflictException(String.format("Email '%s' already exists", email));
 		}
 	}
 
 	private void validateUniquePhone(String phone) {
 		if (repository.findByPhoneNumber(phone) != null) {
-			throw new DatabaseConflictException(String.format("Número de celular: '%s' já existe no sistema", phone));
+			throw new DatabaseConflictException(String.format("Phone number : '%s' already exists", phone));
 		}
 	}
 
