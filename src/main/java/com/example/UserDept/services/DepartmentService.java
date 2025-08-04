@@ -36,7 +36,7 @@ public class DepartmentService {
 		log.info("Buscando departamento com ID: {}", id);
 		return repository.findById(id).orElseThrow(() -> {
 			log.error("Departamento com ID {} não encontrado", id);
-			return new ResourceNotFoundException(id);
+			return new ResourceNotFoundException("Department ID not found: " + id);
 		});
 	}
 	
@@ -44,7 +44,7 @@ public class DepartmentService {
 	public Department insert(Department dept) {
 		log.info("Criando departamento: {}", dept.getName());
 		if(repository.findByName(dept.getName()) != null){
-			throw new DatabaseConflictException(String.format("O departamento '%s' já existe", dept.getName()));
+			throw new DatabaseConflictException(String.format("The department '%s' already exists", dept.getName()));
 		}
 		return repository.save(dept);
 	}
@@ -53,7 +53,7 @@ public class DepartmentService {
 	public void delete(Long id) {
 		findById(id);
 		if(empService.hasDependentEmployees(id)){
-			throw new DatabaseConflictException("O departamento não pode ser excluído, pois tem empregados associados");
+			throw new DatabaseConflictException("The department cannot be deleted because it has associated employees.");
 		}
 		repository.deleteById(id);
 	}

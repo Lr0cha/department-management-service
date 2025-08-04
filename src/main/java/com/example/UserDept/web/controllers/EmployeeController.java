@@ -74,6 +74,8 @@ public class EmployeeController {
 					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAuthenticationEntryPoint.class))),
 			@ApiResponse(responseCode = "403", description = "Recurso proibido",
 					content = @Content(mediaType = "application/json", schema = @Schema(implementation = CustomAccessDeniedHandler.class))),
+			@ApiResponse(responseCode = "404", description = "Departamento relacionado não encontrado",
+					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(responseCode = "409", description = "Recurso com conflito",
 					content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
 			@ApiResponse(responseCode = "422", description = "Recurso não processado por dados de entrada inválidos",

@@ -24,7 +24,7 @@ public class AddressService {
                 .block();
 
         if (response == null || response.getCep() == null) {
-            throw new ResourceNotFoundException("Endereço não encontrado para o CEP: " + zipCode);
+            throw new ResourceNotFoundException("Address not found for the ZIP code: " + zipCode);
         }
 
         Address address = new Address();

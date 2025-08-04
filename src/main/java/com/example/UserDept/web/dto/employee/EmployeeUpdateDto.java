@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
 @ValidEmployeeUpdate
 @Getter
+@Setter
 public class EmployeeUpdateDto {
 
     @Email(message = "Invalid email format", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")

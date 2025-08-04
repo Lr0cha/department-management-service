@@ -45,7 +45,7 @@ public class EmployeeService {
 		return repository.findById(id)
 				.orElseThrow(() -> {
 					log.error("Funcionário com ID {} não encontrado", id);
-					return new ResourceNotFoundException(id);
+					return new ResourceNotFoundException("Employee ID not found: " + id);
 				});
 	}
 

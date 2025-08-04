@@ -2,6 +2,7 @@ package com.example.UserDept.web.controllers;
 
 import com.example.UserDept.entities.employee.Employee;
 import com.example.UserDept.exceptions.InvalidAuthenticationException;
+import com.example.UserDept.services.AuthService;
 import com.example.UserDept.services.TokenService;
 import com.example.UserDept.web.dto.auth.LoginRequestDto;
 import com.example.UserDept.web.dto.auth.LoginResponseDto;
@@ -27,10 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenService tokenService;
+    private AuthService authService;
 
     @Operation(summary="Autenticar o usuário",description = "Recurso para autenticar um usuário",
             responses = {
@@ -41,15 +39,8 @@ public class LoginController {
             })
     @PostMapping
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
-        try {
-            var emailPassword = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
-            var auth = this.authenticationManager.authenticate(emailPassword);
+        String token = authService.authenticateAndGenerateToken(dto.getEmail(), dto.getPassword());
 
-            var token = tokenService.generateToken((Employee) auth.getPrincipal());
-            return ResponseEntity.ok(new LoginResponseDto(token));
-
-        } catch (AuthenticationException e) {
-            throw new InvalidAuthenticationException("Invalid email and/or password.");
-        }
+        return ResponseEntity.ok(new LoginResponseDto(token));
     }
 }
