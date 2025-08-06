@@ -1,0 +1,20 @@
+CREATE TABLE tb_employees (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL UNIQUE,
+    role VARCHAR(6) NOT NULL DEFAULT 'COMMON',
+    department_id BIGINT,
+    zip_code VARCHAR(20),
+    street VARCHAR(255),
+    house_number INT,
+    neighborhood VARCHAR(100),
+    city VARCHAR(100),
+    state VARCHAR(2),
+    created_at TIMESTAMPTZ NOT NULL,
+    created_by VARCHAR(80) NOT NULL,
+    modified_at TIMESTAMPTZ,
+    modified_by VARCHAR(80),
+    FOREIGN KEY (department_id) REFERENCES tb_departments(id)
+);
