@@ -18,8 +18,6 @@ import com.example.UserDept.repositories.EmployeeRepository;
 import com.example.UserDept.exceptions.DatabaseConflictException;
 import com.example.UserDept.exceptions.ResourceNotFoundException;
 
-import java.util.Objects;
-
 @Slf4j
 @Service
 public class EmployeeService {
@@ -122,9 +120,5 @@ public class EmployeeService {
 		if (repository.findByPhoneNumber(phone) != null) {
 			throw new DatabaseConflictException(String.format("Phone number : '%s' already exists", phone));
 		}
-	}
-
-	protected boolean hasDependentEmployees(Long departmentId) {
-		return repository.countByDepartmentId(departmentId) > 0;
 	}
 }

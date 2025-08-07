@@ -24,9 +24,6 @@ public class DepartmentServiceUnitTest {
     @Mock
     DepartmentRepository repository;
 
-    @Mock
-    EmployeeService empService;
-
     @InjectMocks
     DepartmentService service;
 
@@ -92,7 +89,7 @@ public class DepartmentServiceUnitTest {
     void delete_returnVoid_WhenSuccess() {
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.of(new Department(id, "Existing Department")));
-        when(empService.hasDependentEmployees(1L)).thenReturn(false);
+        when(repository.countEmployeesInDepartment(id)).thenReturn(0L);
 
         service.delete(id);
 
@@ -103,7 +100,7 @@ public class DepartmentServiceUnitTest {
     void delete_ThrowDatabaseConflictException_whenHasDependentEmployees(){
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.of(new Department(id, "Existing Department")));
-        when(empService.hasDependentEmployees(1L)).thenReturn(true);
+        when(repository.countEmployeesInDepartment(id)).thenReturn(1L);
 
         DatabaseConflictException exception = assertThrows(
                 DatabaseConflictException.class,

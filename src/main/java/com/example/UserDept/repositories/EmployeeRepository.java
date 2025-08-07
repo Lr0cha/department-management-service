@@ -9,5 +9,4 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface EmployeeRepository extends JpaRepository<Employee,Long>, JpaSpecificationExecutor<Employee> {
     UserDetails findByEmail(String email);
     Employee findByPhoneNumber(String phoneNumber);
-    Long countByDepartmentId(Long id);
 }

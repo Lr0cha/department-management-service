@@ -4,7 +4,6 @@ package com.example.UserDept.services;
 import com.example.UserDept.exceptions.DatabaseConflictException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,10 +20,6 @@ public class DepartmentService {
 
 	@Autowired
 	private DepartmentRepository repository;
-
-	@Autowired
-	@Lazy
-	private EmployeeService empService;
 
 	@Transactional(readOnly = true)
 	public Page<Department> findAll(Pageable pageable){
@@ -52,7 +47,7 @@ public class DepartmentService {
 	@Transactional
 	public void delete(Long id) {
 		findById(id);
-		if(empService.hasDependentEmployees(id)){
+		if(repository.countEmployeesInDepartment(id) > 0){
 			throw new DatabaseConflictException("The department cannot be deleted because it has associated employees.");
 		}
 		repository.deleteById(id);
