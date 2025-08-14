@@ -2,26 +2,28 @@
 
 Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite o gerenciamento de **departamentos** e **empregados**, com autenticação via **JWT** e controle de acesso baseado em papéis (`ADMIN`, `COMMON`).
 
-> ⚠️ **Projeto em desenvolvimento:** funcionalidades podem mudar ao longo do tempo.
+> [!NOTE]\
+> **Projeto em desenvolvimento:** funcionalidades podem mudar ao longo do tempo.
 
 
 ## 🚀 Funcionalidades Implementadas
 
 - ✅ Cadastro e gerenciamento de departamentos e empregados  
 - ✅ Vinculação de empregado a um departamento  
-- ✅ Autenticação e autorização com Spring Security + JWT
+- ✅ Autenticação e autorização com **Spring Security** + **JWT**
 - ✅ Paginação e ordenação com `Pageable` nos endpoints de listagem
-- ✅ Filtragem com Specification  
+- ✅ Filtragem com **Specification**  
 - ✅ Validações personalizadas para atualização de dados (email, senha, endereço)
 - ✅ Integração com **ViaCEP** via `WebClient` para buscar endereço por CEP
 - ✅ Auditoria automática (usuário e data de criação/atualização)
 - ✅ Validações e tratamento global de erros  
-- ✅ Banco de dados PostgreSQL com Docker Compose  
+- ✅ Banco de dados **PostgreSQL** e **Dockerfile** em **Docker Compose**  
 - ✅ Controle de acesso baseado em papéis (`ADMIN` e `COMMON`)
-- 🔜 Documentação com Swagger
-- 🔜 Testes de unidade e integração  
-- 🔜 Métricas com Actuator
-  
+- ✅ Documentação com **Swagger**
+- ✅ Testes de unidade para camada **services**
+- 🔜 Testes de integração com **TestContainers**
+- 🔜 Métricas com **Spring Actuator**
+- ✅ **Github Actions** para **CI/CD**
 
 ## 🔐 Regras de Acesso
 
