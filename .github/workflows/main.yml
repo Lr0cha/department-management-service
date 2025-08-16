@@ -11,17 +11,6 @@ jobs:
     name: Build and Publish Application
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: userDept
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: 1234
-        ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready -U test" --health-interval=5s --health-timeout=5s --health-retries=5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
