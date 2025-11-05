@@ -1,6 +1,12 @@
-# 💼 Sistema de Gerenciamento de Departamentos e Empregados
+<div align="center">
+  <h1>💼 Gerenciamento de Departamentos e Empregados</h1>
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=java,spring,postgresql,docker,githubactions" alt="My Skills" />
+  </a>
+</div>
 
-Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite o gerenciamento de **departamentos** e **empregados**, com autenticação via **JWT** e controle de acesso baseado em papéis (`ADMIN`, `COMMON`).
+
+Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite o gerenciamento de **departamentos** e **empregados**, com autenticação via **JWT** e controle de acesso baseado em papéis (`ADMIN`, `COMMON`). O projeto inclui **workflows** automatizados para **build, testes e push** para um registry (**Docker hub**), garantindo a integração contínua e entrega eficiente da aplicação.
 
 > [!NOTE]\
 > **Projeto em desenvolvimento:** funcionalidades podem mudar ao longo do tempo.
@@ -21,7 +27,7 @@ Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite
 - ✅ Controle de acesso baseado em papéis (`ADMIN` e `COMMON`)
 - ✅ Documentação com **Swagger**
 - ✅ Testes de unidade para camada **services**
-- 🔜 Testes de integração com **TestContainers**
+- ✅ Testes de integração com **TestContainers**
 - 🔜 Métricas com **Spring Actuator**
 - ✅ **Github Actions** para **CI/CD**
 
@@ -35,26 +41,8 @@ Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite
 
 ### 👤 Usuário `COMMON`
 
-- Pode **acessar apenas seus próprios dados** através de `GET /employees/{id}`, desde que o `id` pertença a ele.
+- Pode **acessar apenas seus próprios dados** através de `GET /employees/{id}`.
 - **Não pode listar todos os empregados**, nem cadastrar ou alterar dados de terceiros.
-
-
-## <div align=center>📦 Tecnologias Utilizadas</div>
-
-<div align="center">
-
-| Tecnologia       | Descrição                           |
-|------------------|-------------------------------------|
-| Java 21          | Linguagem principal                 |
-| Spring Boot      | Framework para desenvolvimento web  |
-| Spring Security  | Autenticação e autorização          |
-| JWT              | Tokens de autenticação              |
-| Spring Data JPA  | Acesso e persistência de dados      |
-| PostgreSQL       | Banco de dados relacional           |
-| Maven            | Gerenciador de dependências         |
-| Docker Compose   | Conteinerização (banco e aplicação) |
-| WebClient        | Cliente HTTP reativo (ViaCEP)       |
-</div>
 
 ## <div align=center>📂 Estrutura de Endpoints (parcial)</div>
 
@@ -62,7 +50,7 @@ Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite
 
 | Método | Endpoint            | Papel necessário |
 |--------|---------------------|------------------|
-| POST   | `/login`            | PUBLIC           |
+| POST   | `/login`            | ADMIN / COMMON   |
 | GET    | `/employees`        | ADMIN            |
 | GET    | `/employees/{id}`   | ADMIN / COMMON   |
 | POST   | `/employees`        | ADMIN            |
@@ -74,15 +62,6 @@ Este é um **Web Service RESTful** desenvolvido com **Spring Boot**, que permite
 | DELETE | `/departments/{id}` | ADMIN            |
 
 </div>
-
-## ✨ Detalhes do Novo Endpoint de Atualização
-
-- O endpoint `PATCH /employees/{id}` substitui atualizações parciais separadas.
-- Permite atualizar telefone, departamento, endereço, email e senha com regras específicas:
-    - Para atualizar **email**, é necessário informar o email atual.
-    - Para atualizar **senha**, são necessários: senha atual, nova senha e confirmação.
-    - Para atualizar o **endereço**, é obrigatório enviar o CEP e o número da residência juntos.
-- Todas essas validações são feitas com um **validador personalizado**.
 
 ## 📝 Observações
 
